@@ -20,7 +20,6 @@ class PostPagesTest(TestCase):
             slug='another-test-slug'
         )
 
-
     def setUp(self):
         self.guest_client = Client()
         self.user = User.objects.create_user(username='Petuh')
@@ -31,7 +30,6 @@ class PostPagesTest(TestCase):
             author=self.user,
             group=self.group
         )
-
 
     def test_pages_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
@@ -104,14 +102,14 @@ class PostPagesTest(TestCase):
                 # Проверяет, что поле формы является экземпляром
                 # указанного класса
                 self.assertIsInstance(form_field, expected)
-    
+
     def test_profile_page_show_correct_context(self):
         """Шаблон profile сформирован с правильным контекстом"""
         response = self.guest_client.get(reverse(
             'posts:profile', kwargs={'username': self.user.username}))
         self.assertEqual(response.context['page'][0], self.post)
         self.assertEqual(response.context['author'], self.user)
-    
+
     def test_post_page_show_correct_context(self):
         """Шаблон post сформирован с правильным контекстом"""
         response = self.guest_client.get(reverse('posts:post', kwargs={
@@ -120,7 +118,7 @@ class PostPagesTest(TestCase):
         }))
         self.assertEqual(response.context['post'], self.post)
         self.assertEqual(response.context['author'], self.user)
-    
+
     def test_about_author_page_for_guest(self):
         response = self.guest_client.get(reverse('about:author'))
         self.assertEqual(response.status_code, 200)
@@ -155,7 +153,7 @@ class PaginatorViewsTest(TestCase):
         """Передаётся 10 записей на странице"""
         response = self.guest_client.get(reverse("posts:index"))
         self.assertEqual(len(response.context.get("page").object_list), 10)
-    
+
     def test_paginator_second_page(self):
         response = self.guest_client.get(reverse('posts:index') + '?page=2')
         self.assertEqual(len(response.context.get('page').object_list), 3)

@@ -10,17 +10,17 @@ class StaticURLTests(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.author = User.objects.create(
-        username='Bob',
-        password='tibetritualknife'
+            username='Bob',
+            password='tibetritualknife'
         )
         cls.group = Group.objects.create(
             title='Группа',
             slug='test-slug'
         )
         cls.post = Post.objects.create(
-        text='Ваш текст',
-        group=cls.group,
-        author_id=cls.author.id
+            text='Ваш текст',
+            group=cls.group,
+            author_id=cls.author.id
         )
 
     def setUp(self):
@@ -32,7 +32,6 @@ class StaticURLTests(TestCase):
         self.post = StaticURLTests.post
         self.Bob = Client()
         self.Bob.force_login(self.author)
- 
 
     def test_homepage(self):
         """Страница / доступна любому пользователю."""
@@ -58,23 +57,30 @@ class StaticURLTests(TestCase):
 
     def test_post_page_url_exist_at_desired_location(self):
         """Страница поста доступна любому пользователю."""
-        response = self.guest_client.get(f'/{self.author.username}/{self.post.id}/')
+        response = self.guest_client.get(
+            f'/{self.author.username}/{self.post.id}/')
         self.assertEqual(response.status_code, 200)
 
     def test_post_edit_page_url_for_anonymous(self):
         """Страница редактирования поста перенаправляет анонима."""
-        response = self.guest_client.get(f'/{self.author.username}/{self.post.id}/edit/')
-        self.assertRedirects(response, f'/auth/login/?next=/{self.author.username}/{self.post.id}/edit/')
+        response = self.guest_client.get(
+            f'/{self.author.username}/{self.post.id}/edit/')
+        self.assertRedirects(
+            response,
+            f'/auth/login/?next=/{self.author.username}/{self.post.id}/edit/')
 
     def test_post_edit_page_url_for_author(self):
         """Страница редактирования поста доступна автору."""
-        response = self.Bob.get(f'/{self.author.username}/{self.post.id}/edit/')
+        response = self.Bob.get(
+            f'/{self.author.username}/{self.post.id}/edit/')
         self.assertEqual(response.status_code, 200)
 
     def test_post_edit_page_url_for_any_authorized_user(self):
         """Страница редактирования поста недоступна не автору."""
-        response = self.authorized_client.get(f'/{self.author.username}/{self.post.id}/edit/')
-        self.assertRedirects(response, f'/{self.author.username}/{self.post.id}/')    
+        response = self.authorized_client.get(
+            f'/{self.author.username}/{self.post.id}/edit/')
+        self.assertRedirects(
+            response, f'/{self.author.username}/{self.post.id}/')
 
     def test_urls_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""

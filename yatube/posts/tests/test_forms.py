@@ -17,16 +17,15 @@ class CreatePostFormTest(TestCase):
             'author': self.user,
         }
         self.group = Group.objects.create(
-        title='Заголовок',
-        slug='test-1',
-        description='Описание'
+            title='Заголовок',
+            slug='test-1',
+            description='Описание'
         )
         self.post = Post.objects.create(
             text='Белиберда бла бла',
-            author= self.user,
+            author=self.user,
         )
         self.post_count = Post.objects.count()
-
 
     def testing_creating_post(self):
         post_count = Post.objects.count()
@@ -44,20 +43,6 @@ class CreatePostFormTest(TestCase):
         """Тест post_edit"""
         post_count = self.post_count
         text = 'Белиберда бла бла'
-        form_data = {
-            'text': text,
-            'group': self.group.id
-        }
-        response = self.client.post(
-            reverse(
-                'posts:post',
-                kwargs={
-                    'username': self.user,
-                    'post_id': self.post.pk
-                }
-            ),
-            data=form_data
-        )
         response_index = self.client.post(
             reverse('posts:index')
         )
