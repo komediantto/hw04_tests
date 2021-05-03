@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from posts.models import Post
 from posts.forms import PostForm
 
-from tests.utils import get_field_from_context
+from utils import get_field_from_context
 
 
 class TestPostView:
