@@ -40,6 +40,9 @@ class PostPagesTest(TestCase):
             'group.html': reverse('posts:group', kwargs={'slug': 'test-slug'}),
             'about/author.html': reverse('about:author'),
             'about/tech.html': reverse('about:tech'),
+            'post_edit.html': reverse('posts:post_edit', kwargs={
+                'username': f'{self.post.author}',
+                'post_id': f'{self.post.id}'}),
         }
         # Проверяем, что при обращении к name
         # вызывается соответствующий HTML-шаблон
@@ -66,7 +69,10 @@ class PostPagesTest(TestCase):
 
     def test_post_edit_page_show_correct_context(self):
         """Шаблон редактирования поста сформирован с правильным контекстом."""
-        response = self.authorized_client.get(reverse('posts:new_post'))
+        response = self.authorized_client.get(
+            reverse('posts:post_edit', kwargs={
+                'username': f'{self.post.author}',
+                'post_id': f'{self.post.id}'}))
         form_fields = {
             'text': forms.fields.CharField,
             'group': forms.fields.ChoiceField,

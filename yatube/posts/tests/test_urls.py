@@ -85,12 +85,12 @@ class StaticURLTests(TestCase):
     def test_urls_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
         templates_url_names = {
-            'new_post.html': f'/{self.author.username}/{self.post.id}/',
+            'post_edit.html': f'/{self.author.username}/{self.post.id}/edit/',
             'index.html': '',
             'new_post.html': '/new/',
             'group.html': '/group/test-slug/',
         }
         for template, url in templates_url_names.items():
             with self.subTest(url=url):
-                response = self.authorized_client.get(url)
+                response = self.Bob.get(url)
                 self.assertTemplateUsed(response, template)

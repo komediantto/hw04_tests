@@ -83,5 +83,5 @@ def post_edit(request, username, post_id):
             return redirect('posts:post',
                             username=request.user.username,
                             post_id=post_id)
-    return render(request, 'new_post.html',
+    return render(request, 'post_edit.html',
                   {'form': form, 'author': author, 'post': post})
