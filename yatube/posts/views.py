@@ -22,7 +22,7 @@ def index(request):
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    posts = group.posts.all().order_by('-pub_date')
+    posts = group.posts.all()
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -43,7 +43,7 @@ def new_post(request):
 def profile(request, username):
     user = request.user
     author = get_object_or_404(User, username=username)
-    posts = author.posts.all().order_by('-pub_date')
+    posts = author.posts.all()
     count_posts = posts.count()
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
@@ -57,8 +57,8 @@ def profile(request, username):
 
 
 def post_view(request, username, post_id):
-    author = get_object_or_404(User, username=username)
-    post = get_object_or_404(Post, author=author, id=post_id)
+    post = get_object_or_404(Post, author__username=username, id=post_id)
+    author = post.author
     count_posts = author.posts.count()
     return render(request, 'post.html', {
         'author': author,
@@ -77,11 +77,10 @@ def post_edit(request, username, post_id):
                         post_id=post_id)
     form = PostForm(request.POST or None, files=request.FILES or None,
                     instance=post)
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return redirect('posts:post',
-                            username=request.user.username,
-                            post_id=post_id)
+    if form.is_valid():
+        form.save()
+        return redirect('posts:post',
+                        username=request.user.username,
+                        post_id=post_id)
     return render(request, 'post_edit.html',
                   {'form': form, 'author': author, 'post': post})

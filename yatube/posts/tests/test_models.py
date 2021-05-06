@@ -54,5 +54,5 @@ class PostModelTest(TestCase):
         group = PostModelTest.group
         expected_object_name = post.text[:15]
         expected_group_name = group.title
-        self.assertEqual(expected_object_name, str(post.text[:15]))
+        self.assertEqual(expected_object_name, str(post.text))
         self.assertEqual(expected_group_name, str(group.title))
