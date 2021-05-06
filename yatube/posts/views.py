@@ -9,7 +9,7 @@ User = get_user_model()
 
 
 def index(request):
-    latest = Post.objects.all().order_by('-pub_date')
+    latest = Post.objects.all()
     paginator = Paginator(latest, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -33,7 +33,7 @@ def group_posts(request, slug):
 def new_post(request):
     form = PostForm(request.POST or None)
     if not form.is_valid():
-        return render(request, "new_post.html", {'form': form})
+        return render(request, 'post_create_and_edit.html', {'form': form})
     post = form.save(commit=False)
     post.author = request.user
     post.save()
@@ -82,5 +82,5 @@ def post_edit(request, username, post_id):
         return redirect('posts:post',
                         username=request.user.username,
                         post_id=post_id)
-    return render(request, 'post_edit.html',
+    return render(request, 'post_create_and_edit.html',
                   {'form': form, 'author': author, 'post': post})

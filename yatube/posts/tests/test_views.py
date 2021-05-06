@@ -35,18 +35,18 @@ class PostPagesTest(TestCase):
         """URL-адрес использует соответствующий шаблон."""
         # Собираем в словарь пары "имя_html_шаблона: reverse(name)"
         templates_pages_names = {
-            'index.html': reverse('posts:index'),
-            'new_post.html': reverse('posts:new_post'),
-            'group.html': reverse('posts:group', kwargs={'slug': 'test-slug'}),
-            'about/author.html': reverse('about:author'),
-            'about/tech.html': reverse('about:tech'),
-            'post_edit.html': reverse('posts:post_edit', kwargs={
+            reverse('posts:index'): 'index.html',
+            reverse('posts:new_post'): 'post_create_and_edit.html',
+            reverse('posts:group', kwargs={'slug': 'test-slug'}): 'group.html',
+            reverse('about:author'): 'about/author.html',
+            reverse('about:tech'): 'about/tech.html',
+            reverse('posts:post_edit', kwargs={
                 'username': f'{self.post.author}',
-                'post_id': f'{self.post.id}'}),
+                'post_id': f'{self.post.id}'}): 'post_create_and_edit.html',
         }
         # Проверяем, что при обращении к name
         # вызывается соответствующий HTML-шаблон
-        for template, reverse_name in templates_pages_names.items():
+        for reverse_name, template in templates_pages_names.items():
             with self.subTest(template=template):
                 response = self.authorized_client.get(reverse_name)
                 self.assertTemplateUsed(response, template)
