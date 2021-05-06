@@ -85,7 +85,7 @@ class StaticURLTests(TestCase):
     def test_urls_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
         templates_url_names = {
-            f'/{self.author.username}/{self.post.id}/edit/': 
+            f'/{self.author.username}/{self.post.id}/edit/':
             'post_create_and_edit.html',
             '/new/': 'post_create_and_edit.html',
             '': 'index.html',
